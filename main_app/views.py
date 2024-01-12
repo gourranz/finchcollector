@@ -1,16 +1,7 @@
 from django.shortcuts import render
-finches = [
-    {'name': 'House Finch', 'description': 'colorful and social', 'habitat': 'urban and suburban areas', 'age': 2},
-    {'name': 'Goldfinch', 'description': 'bright yellow plumage', 'habitat': 'open fields and gardens', 'age': 1},
-    {'name': 'Zebra Finch', 'description': 'small and active', 'habitat': 'grasslands and open forests', 'age': 3},
-    {'name': 'Canary', 'description': 'known for singing', 'habitat': 'captivity, originally from Macaronesian islands', 'age': 2},
-    {'name': 'Purple Finch', 'description': 'rich plumage with raspberry color', 'habitat': 'forests and woodlands', 'age': 1},
-    {'name': 'Society Finch', 'description': 'sociable and good for aviaries', 'habitat': 'captivity, originally from Asia', 'age': 4},
-    {'name': 'Gouldian Finch', 'description': 'vibrantly colored with distinct head colors', 'habitat': 'northern Australia', 'age': 2},
-    {'name': 'Java Sparrow', 'description': 'bold black and white markings', 'habitat': 'Java and Bali', 'age': 1},
-    {'name': 'Chaffinch', 'description': 'common in Europe', 'habitat': 'forests and gardens', 'age': 3},
-    {'name': 'Redpoll Finch', 'description': 'small with red crown and black bib', 'habitat': 'northern regions', 'age': 2},
-]
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from .models import Finch
+
 
 # Define the home view
 def home(request):
@@ -22,6 +13,23 @@ def about(request):
 
 def finches_index(request):
   # We pass data to a template very much like we did in Express!
+  finches= Finch.objects.all()
   return render(request, 'finches/index.html', {
     'finches': finches
   })
+def finches(request, finch_id):
+  finch = Finch.objects.get(id=finch_id)
+  return render(request, 'finches/detail.html', {
+    'finch': finch
+  })
+class FinchCreate(CreateView):
+  model = Finch
+  fields = '__all__'
+
+class FinchUpdate(UpdateView):
+  model = Finch
+  fields = ['habitat', 'description', 'age']
+
+class FinchDelete(DeleteView):
+  model = Finch
+  success_url = '/finches'

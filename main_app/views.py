@@ -20,8 +20,11 @@ def finches_index(request):
   })
 def finches(request, finch_id):
   finch = Finch.objects.get(id=finch_id)
+  feeding_form = FeedingForm()
   return render(request, 'finches/detail.html', {
-    'finch': finch
+    'finch': finch,
+    'feeding_form': feeding_form
+
   })
 class FinchCreate(CreateView):
   model = Finch
